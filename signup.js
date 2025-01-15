@@ -13,13 +13,16 @@ document.getElementById('signup-form').addEventListener('submit', async (e) => {
 
     if (response.ok) {
       alert('Registration successful! Please log in.');
-      window.location.href = '/'; // Redirect to the homepage or login page
+      window.location.href = '/'; // Redirect to the homepage
     } else {
       const errorData = await response.json();
-      alert(`Error: ${errorData.error}`);
+      showError(`Error: ${errorData.error}`);
     }
   } catch (error) {
-    console.error('Sign up error:', error);
-    alert('An unexpected error occurred.');
+    showError('An unexpected error occurred.');
   }
 });
+
+function showError(message) {
+  alert(message);
+}

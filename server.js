@@ -4,7 +4,7 @@ const MongoClient = require('mongodb').MongoClient;
 const bcrypt = require('bcrypt');
 const app = express();
 
-app.use(express.static(__dirname));
+app.use(express.static(__dirname)); // Serve static files
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -19,6 +19,11 @@ MongoClient.connect(connectionString)
 
     app.get('/', (req, res) => {
       res.sendFile(__dirname + '/index.html');
+    });
+
+    app.get('/auth-status', (req, res) => {
+      // Example logic for authentication status
+      res.json({ authenticated: false }); // Update based on actual auth logic
     });
 
     app.get('/lyrics', async (req, res) => {

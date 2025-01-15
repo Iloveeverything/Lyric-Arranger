@@ -6,14 +6,14 @@ document.addEventListener('DOMContentLoaded', () => {
   if (registerButton) {
     registerButton.addEventListener('click', (e) => {
       e.preventDefault();
-      createAuthPopup('Sign Up', handleSignUp);
+      openAuthPopup('Sign Up', handleSignUp);
     });
   }
 
   if (loginButton) {
     loginButton.addEventListener('click', (e) => {
       e.preventDefault();
-      createAuthPopup('Login', handleLogin);
+      openAuthPopup('Login', handleLogin);
     });
   }
 
@@ -25,61 +25,61 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
-function createAuthPopup(title, callback) {
-  const existingPopup = document.getElementById('auth-popup');
-  if (existingPopup) {
-    existingPopup.remove();
+let popup; // Cache popup for reuse
+function openAuthPopup(title, callback) {
+  if (!popup) {
+    popup = document.createElement('div');
+    popup.id = 'auth-popup';
+    popup.className = 'auth-popup';
+    document.body.appendChild(popup);
+
+    const popupContent = document.createElement('div');
+    popupContent.className = 'auth-popup-content';
+
+    const popupTitle = document.createElement('h2');
+    const usernameInput = document.createElement('input');
+    const passwordInput = document.createElement('input');
+    const submitButton = document.createElement('button');
+    const cancelButton = document.createElement('button');
+
+    usernameInput.type = 'text';
+    usernameInput.placeholder = 'Username';
+    passwordInput.type = 'password';
+    passwordInput.placeholder = 'Password';
+    submitButton.textContent = 'Submit';
+    cancelButton.textContent = 'Cancel';
+
+    popupContent.append(
+      popupTitle,
+      usernameInput,
+      passwordInput,
+      submitButton,
+      cancelButton
+    );
+    popup.appendChild(popupContent);
+
+    submitButton.addEventListener('click', () => {
+      if (validateInputs(usernameInput.value, passwordInput.value)) {
+        callback(usernameInput.value, passwordInput.value);
+        popup.style.display = 'none';
+      }
+    });
+
+    cancelButton.addEventListener('click', () => {
+      popup.style.display = 'none';
+    });
   }
 
-  const popup = document.createElement('div');
-  popup.id = 'auth-popup';
-  popup.className = 'auth-popup';
+  popup.querySelector('h2').textContent = title;
+  popup.style.display = 'flex';
+}
 
-  const popupContent = document.createElement('div');
-  popupContent.className = 'auth-popup-content';
-
-  const popupTitle = document.createElement('h2');
-  popupTitle.textContent = title;
-
-  const usernameInput = document.createElement('input');
-  usernameInput.type = 'text';
-  usernameInput.placeholder = 'Username';
-
-  const passwordInput = document.createElement('input');
-  passwordInput.type = 'password';
-  passwordInput.placeholder = 'Password';
-
-  const submitButton = document.createElement('button');
-  submitButton.textContent = 'Submit';
-
-  const cancelButton = document.createElement('button');
-  cancelButton.textContent = 'Cancel';
-
-  popupContent.append(
-    popupTitle,
-    usernameInput,
-    passwordInput,
-    submitButton,
-    cancelButton
-  );
-  popup.appendChild(popupContent);
-  document.body.appendChild(popup);
-
-  submitButton.addEventListener('click', () => {
-    const username = usernameInput.value;
-    const password = passwordInput.value;
-
-    if (username && password) {
-      callback(username, password);
-      popup.remove();
-    } else {
-      alert('Please enter both username and password.');
-    }
-  });
-
-  cancelButton.addEventListener('click', () => {
-    popup.remove();
-  });
+function validateInputs(username, password) {
+  if (!username || !password) {
+    alert('Please enter both username and password.');
+    return false;
+  }
+  return true;
 }
 
 async function handleSignUp(username, password) {
