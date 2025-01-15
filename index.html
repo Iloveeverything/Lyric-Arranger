@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="https://cdn.jsdelivr.net/npm/@interactjs/interactjs/dist/interact.min.js"></script>
+
+    <title>CRUD Practice</title>
+  </head>
+  <body>
+    <div class="simple-auth">
+      <button id="register-button">Sign Up</button>
+      <button id="login-button">Login</button>
+      <button id="logout-button">Logout</button>
+    </div>
+    <h1>Song Lyric Arranger</h1>
+    <form action="/lyrics" method="POST">
+      <input name="date" type="date" placeholder="date" id="date" /><br />
+      <textarea
+        name="lyric"
+        placeholder="lyric"
+        id="lyric"
+        rows="4"
+        cols="50"
+      ></textarea
+      ><br />
+      <button type="submit">Submit</button>
+    </form>
+
+    <script src="scripts.js"></script>
+    <script src="main.js"></script>
+    <script src="auth.js"></script>
+  </body>
+</html>
